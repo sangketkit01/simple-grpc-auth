@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/sangketkit01/simple-grpc-auth/config"
 	db "github.com/sangketkit01/simple-grpc-auth/db/sqlc"
@@ -13,20 +12,20 @@ import (
 type Server struct {
 	pb.UnimplementedGrpcSimpleAuthServer
 	tokenMaker token.Maker
-	store *db.Store
-	config config.Config
+	store      *db.Store
+	config     config.Config
 }
 
-func NewServer(store *db.Store, config config.Config) (*Server, error){
+func NewServer(store *db.Store, config config.Config) (*Server, error) {
 	tokenMaker, err := token.NewPasetoMaker(config.SecretKey)
-	if err != nil{
+	if err != nil {
 		return nil, fmt.Errorf("cannot create token maker: %w", err)
 	}
 
 	server := &Server{
-		store: store,
+		store:      store,
 		tokenMaker: tokenMaker,
-		config: config,
+		config:     config,
 	}
 
 	return server, nil
