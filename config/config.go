@@ -7,10 +7,12 @@ import (
 )
 
 type Config struct {
-	DBDriver          string    `mapstructure:"DB_DRIVER"`
-	DBSource          string    `mapstructure:"DB_SOURCE"`
-	SecretKey         string    `mapstructure:"SECRET_KEY"`
-	AccessKeyDuration time.Duration `mapstructure:"ACCESS_KEY_DURATION"`
+	DBDriver             string        `mapstructure:"DB_DRIVER"`
+	DBSource             string        `mapstructure:"DB_SOURCE"`
+	SecretKey            string        `mapstructure:"SECRET_KEY"`
+	AccessKeyDuration    time.Duration `mapstructure:"ACCESS_KEY_DURATION"`
+	GrpcServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
+	GatewayServerAddress string        `mapstructure:"GATEWAY_SERVER_ADDRESS"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

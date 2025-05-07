@@ -37,16 +37,16 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	go runGatewayServer(server)
-	runGrpcServer(server)
+	go runGatewayServer(server, config)
+	runGrpcServer(server, config)
 }
 
-func runGrpcServer(server *api.Server){
+func runGrpcServer(server *api.Server, config config.Config){
 	grpcServer := grpc.NewServer()
 	pb.RegisterGrpcSimpleAuthServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
-	listener, err := net.Listen("tcp","0.0.0.0:9090")
+	listener, err := net.Listen("tcp", config.GrpcServerAddress)
 	if err != nil{
 		log.Fatalln(err)
 	}
@@ -56,10 +56,10 @@ func runGrpcServer(server *api.Server){
 		log.Fatalln(err)
 	}
 
-	log.Println("server started at port :9090")
+	log.Printf("gRPC server started at port %s", config.GrpcServerAddress)
 }
 
-func runGatewayServer(server *api.Server){
+func runGatewayServer(server *api.Server, config config.Config){
 	grpcMux := runtime.NewServeMux()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -72,7 +72,7 @@ func runGatewayServer(server *api.Server){
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
 
-	listener, err := net.Listen("tcp","0.0.0.0:8080")
+	listener, err := net.Listen("tcp", config.GatewayServerAddress)
 	if err != nil{
 		log.Println(err)
 	}
@@ -82,4 +82,5 @@ func runGatewayServer(server *api.Server){
 		log.Fatalln(err)
 	}
 	
+	log.Printf("Gateway server started at port %s", config.GatewayServerAddress)
 }
