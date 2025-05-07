@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package pb;
 
+import "google/protobuf/timestamp.proto";
 import "user.proto";
 option go_package = "github.com/sangketkit01/simple-grpc-auth/pb";
 
@@ -12,4 +13,8 @@ message LoginUserRequest{
 
 message LoginUserResponse{
     User user = 1;
+    string session_id = 2;
+    string access_token = 3;
+    google.protobuf.Timestamp access_token_issued_at = 4;
+    google.protobuf.Timestamp access_token_expired_at = 5;
 }
